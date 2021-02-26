@@ -57,13 +57,13 @@ export function Login(){
     return (
         <Row>
             <ColForm descktop='12'>
-                <Label >E-MAIL</Label>
-                <Input placeholder='user.name@mail.com' type='email' />
+                <Label htmlFor='email'>E-MAIL</Label>
+                <Input id='email' placeholder='user.name@mail.com' type='email' />
             </ColForm>
 
             <ColForm descktop='12'>
-                <Label >SENHA</Label>
-                <Input placeholder='****' type='password'  />
+                <Label htmlFor='pass'>SENHA</Label>
+                <Input id='pass' placeholder='*******' type='password'  />
             </ColForm>
 
             <ColForm descktop='12'>
