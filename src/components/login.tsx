@@ -1,5 +1,8 @@
-import { Row, Col} from '../components/Grid'
 import styled from "styled-components";
+import { useForm } from 'react-hook-form';
+import { connect } from "react-redux";
+
+import { Row, Col} from './Grid';
 
 const Label = styled.label`
   font-weight: normal;
@@ -12,7 +15,7 @@ const Label = styled.label`
 `
 
 const Input = styled.input`
-  border: 1px solid #989FDB;
+  border: ${props => props.inputBorder || "1px solid #989FDB"};
   box-sizing: border-box;
   border-radius: 8px;
   width: 100%;
@@ -21,7 +24,6 @@ const Input = styled.input`
   font-size: 12px;
   display: flex;
   align-items: center;
-
   color: #989FDB;
 `
 
@@ -53,28 +55,67 @@ const P = styled.p`
   margin-top: 20px;
 `
 
+const PAlert = styled.p`
+  font-weight: normal;
+  font-size: 10px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  color: #FF377F;
+`
+
 export function Login(){
+    const { register, handleSubmit, errors } = useForm()
+
+    function onSubmit(data) {
+        console.log(data)
+    }
+
     return (
         <Row>
-            <ColForm descktop='12'>
-                <Label htmlFor='email'>E-MAIL</Label>
-                <Input id='email' placeholder='user.name@mail.com' type='email' />
-            </ColForm>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <ColForm descktop='12'>
+                    <Label htmlFor='email'>E-MAIL</Label>
+                    <Input id='email' placeholder='user.name@mail.com' name='email'
+                           inputBorder={errors.email && '1px solid #FF377F'}
+                           ref={register({
+                               required: 'Digite um e-mail',
+                               pattern: {
+                                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                   message: 'Digite um e-mail válido;',
+                               },
+                           })} />
+                    {
+                        errors.email && <PAlert >{errors.email.message}</PAlert>
+                    }
+                </ColForm>
 
-            <ColForm descktop='12'>
-                <Label htmlFor='pass'>SENHA</Label>
-                <Input id='pass' placeholder='*******' type='password'  />
-            </ColForm>
+                <ColForm descktop='12'>
+                    <Label htmlFor='pass'>SENHA</Label>
+                    <Input id='pass' name='password' placeholder='*******' type='password'
+                           inputBorder={errors.password && '1px solid #FF377F'}
+                           ref={register({
+                               required: 'Digite uma senha',
+                               pattern: {
+                                   value: /^(?=(?:.*?[A-Z]){3})(?=(?:.*?[0-9]){2})(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})(?!.*\s)[0-9a-zA-Z!@#$%;*(){}_+^&]*$/,
+                                   message: 'A senha deve conter no mínimo 3 caracteres em maiúsculo, 2 números e 1 caractere especial!',
+                               },
+                           })} />
+                    {
+                        errors.password && <PAlert >{errors.password.message}</PAlert>
+                    }
+                </ColForm>
 
-            <ColForm descktop='12'>
-                <Btn>ENTRAR</Btn>
-            </ColForm>
-            <ColForm descktop='12'>
-                <P >
-                    Esqueceu seu login ou senha?<br/>
-                    Clique <a href=''>aqui</a>
-                </P>
-            </ColForm>
+                <ColForm descktop='12'>
+                    <Btn>ENTRAR</Btn>
+                </ColForm>
+                <ColForm descktop='12'>
+                    <P >
+                        Esqueceu seu login ou senha?<br/>
+                        Clique <a href=''>aqui</a>
+                    </P>
+                </ColForm>
+            </form>
         </Row>
     );
 }
