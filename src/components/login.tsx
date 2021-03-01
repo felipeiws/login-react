@@ -1,8 +1,11 @@
+import { useState } from "react";
+import RingLoader from "react-spinners/RingLoader";
 import styled from "styled-components";
 import { useForm } from 'react-hook-form';
-import { connect } from "react-redux";
+import toast, {Toaster} from "react-hot-toast";
 
 import { Row, Col} from './Grid';
+import api from "../services/api.service";
 
 const Label = styled.label`
   font-weight: normal;
@@ -65,14 +68,31 @@ const PAlert = styled.p`
 `
 
 export function Login(){
-    const { register, handleSubmit, errors } = useForm()
+    const { register, handleSubmit, errors } = useForm();
+    let [loading, setLoading] = useState(false);
+    let [disable, setDisable] = useState(false);
+    let [btnText, setText] = useState('ENTRAR');
 
     function onSubmit(data) {
-        console.log(data)
+        setLoading(!loading)
+        setDisable(!disable)
+        setText('VERIFICANDO...')
+        api.post("auth", data).then((response) => {
+            if (response.data.email == data.email && response.data.password == data.password) {
+                localStorage.setItem("user", JSON.stringify(response.data));
+                toast.success('Logado com sucesso!');
+                setText('Logado')
+                setLoading(false)
+            }
+
+            return response.data;
+        });
+
     }
 
     return (
         <Row>
+            <Toaster />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <ColForm descktop='12'>
                     <Label htmlFor='email'>E-MAIL</Label>
@@ -98,7 +118,7 @@ export function Login(){
                                required: 'Digite uma senha',
                                pattern: {
                                    value: /^(?=(?:.*?[A-Z]){3})(?=(?:.*?[0-9]){2})(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})(?!.*\s)[0-9a-zA-Z!@#$%;*(){}_+^&]*$/,
-                                   message: 'A senha deve conter no mínimo 3 caracteres em maiúsculo, 2 números e 1 caractere especial!',
+                                   message: 'A senha fora do padrão!',
                                },
                            })} />
                     {
@@ -107,7 +127,8 @@ export function Login(){
                 </ColForm>
 
                 <ColForm descktop='12'>
-                    <Btn>ENTRAR</Btn>
+                    <Btn disabled={disable}>{btnText} <RingLoader color="#ffffff" css="margin-left: 6px" loading={loading} size={15} /></Btn>
+
                 </ColForm>
                 <ColForm descktop='12'>
                     <P >
