@@ -1,5 +1,6 @@
-import { Container, Row, Col} from '../components/Grid'
 import styled from "styled-components";
+
+import { Container, Row, Col } from '../components/Grid'
 import { Login } from '../components/login'
 
 const ColImg = styled(Col)`
@@ -36,17 +37,17 @@ const ColForm = styled(Col)`
 
 export default function Home() {
   return (
-    <Container>
-      <Row>
-        <ColImg tablet='5' desktop='7' >
-          <DivImg />
-        </ColImg>
-        <ColForm tablet='7' desktop='5'>
-          <Title>Olá, seja<br /> bem-vindo!</Title>
-          <P>Para acessar a plataforma, faça seu login.</P>
-          <Login  />
-        </ColForm>
-      </Row>
-    </Container>
+      <Container>
+          <Row>
+              <ColImg tablet='5' desktop='7' >
+                  <DivImg />
+              </ColImg>
+              <ColForm tablet='7' desktop='5'>
+                  <Title>Olá, seja<br /> bem-vindo!</Title>
+                  <P>Para acessar a plataforma, faça seu login.</P>
+                  <Login />
+              </ColForm>
+          </Row>
+      </Container>
   )
 }
