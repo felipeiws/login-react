@@ -5,3 +5,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   background: #FAF5FF;
 }
+
+input.error{
+  border: 1px solid #FF377F;
+}
