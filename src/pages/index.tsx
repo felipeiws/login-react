@@ -36,7 +36,6 @@ const ColForm = styled(Col)`
 `
 
 export default function Home() {
-    console.log(localStorage.getItem('user'))
   return (
       <Container>
           <Row>
